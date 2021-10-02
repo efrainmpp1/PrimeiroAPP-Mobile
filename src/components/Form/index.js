@@ -17,6 +17,16 @@ export default function Form(){
     return setMedia(calculo);
   }
 
+  function minNota(notas) {
+    var menorNota = 10;
+    for(i = 0 ; i < notas.length ; i++){
+      if(notas[i] <= menorNota){
+        menorNota = notas[i];
+      }
+    }
+    return menorNota;
+  }
+
   function situAluno() {
     var calculo = ((parseFloat(nota1) + parseFloat(nota2) + parseFloat(nota3))/3).toFixed(2);
     var situ;
@@ -27,9 +37,9 @@ export default function Form(){
       situ = "O aluno está Aprovado por Média";
     }
     else{
-      var menorNota = Math.min([ nota1, nota2 , nota3 ]);
+      var menorNota = minNota([ nota1, nota2 , nota3 ]);
       var resto = parseFloat(nota1) + parseFloat(nota2) + parseFloat(nota3) - parseFloat(menorNota);
-      var precisa = ((15 - resto) < 3) ? 15 - resto : 3 ;
+      var precisa = ((15 - resto) > 3) ? 15 - resto : 3 ;
       situ = "Você está de Recuperação e precisa tirar nota " + precisa ;
     }
     return setMessage(situ);
