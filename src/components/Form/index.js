@@ -27,8 +27,22 @@ export default function Form(){
     return menorNota;
   }
 
+  function menorDe3(notas) {
+    var cont = 0;
+    for(i = 0 ; i < notas.length ; i++){
+      if(notas[i] < 3){
+        cont++;
+      }
+    }
+    return (cont < 2) ? false : true; 
+  }
+
+
   function situAluno() {
     var calculo = ((parseFloat(nota1) + parseFloat(nota2) + parseFloat(nota3))/3).toFixed(2);
+    var menorNota = minNota([ nota1, nota2 , nota3 ]);
+    var resto = parseFloat(nota1) + parseFloat(nota2) + parseFloat(nota3) - parseFloat(menorNota);
+    var precisa = ((15 - resto) > 3) ? 15 - resto : 3 ;
     var situ;
     if(calculo >= 7){
       situ = "O aluno está Aprovado";
@@ -37,16 +51,19 @@ export default function Form(){
       situ = "O aluno está Aprovado por Média";
     }
     else{
-      var menorNota = minNota([ nota1, nota2 , nota3 ]);
-      var resto = parseFloat(nota1) + parseFloat(nota2) + parseFloat(nota3) - parseFloat(menorNota);
-      var precisa = ((15 - resto) > 3) ? 15 - resto : 3 ;
-      situ = "Você está de Recuperação e precisa tirar nota " + precisa ;
+      
+      if(menorDe3([ nota1, nota2 , nota3 ]) || precisa > 10){
+        situ = "Sinto muito mas você já está reprovado :(";
+      }
+      else{
+        situ = "Você está de Recuperação e precisa tirar nota " + precisa ;
+      }  
     }
     return setMessage(situ);
   }
 
   function validarMedia(){
-    if(nota1 != null && nota2 != null && nota3 != null ){
+    if(nota1 != null && nota2 != null && nota3 != null && nota1 <= 10 && nota2 <= 10 && nota3 <= 10 ){
       calcularMedia();
       situAluno();
       setTextButton("Calcular Novamente");
